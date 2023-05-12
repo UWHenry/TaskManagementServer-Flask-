@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Log Out</title>
+        <script>
+            setTimeout(function() {
+              window.location.href = "{{ content.redirect_url }}";
+            }, {{ content.delay }} * 1000);
+        </script>
+    </head>
+    <body>
+        <h1>{{ content.message }}</h1>
+    </body>
+</html>

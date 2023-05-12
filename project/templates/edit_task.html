@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Task</title>
+    <title>Edit Task</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
@@ -15,24 +15,24 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Add Task</h4>
+                        <h4>Edit Task</h4>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{{ content.add_task_url }}">
+                        <form method="post" action="{{ content.edit_task_url }}">
                             <div class="mb-3">
                                 <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <input type="text" class="form-control" id="name" name="name" value="{{content.name}}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="description">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows=10></textarea>
+                                <textarea class="form-control" id="description" name="description" rows=10>{{content.description}}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="deadline">Deadline</label>
-                                <input type="date" class="form-control" id="deadline" name="deadline">
+                                <input type="date" class="form-control" id="deadline" name="deadline" value={{content.deadline}}>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-primary">Add Task</button>
+                                <button type="submit" class="btn btn-primary" name="submit" value="{{content.task_id}}">Edit Task</button>
                                 <button type="button" class="btn btn-primary" onclick="window.location.href='{{ content.dashboard_url }}'">Cancel</button>
                             </div>
                         </form>

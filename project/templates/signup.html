@@ -21,10 +21,10 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <h4>Sign Up</h4>
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('auth_blueprint.login') }}'">Login Page</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ content.login_url }}'">Login Page</button>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{{ url_for('auth_blueprint.signup') }}">
+                        <form method="post" action="{{ content.signup_url }}">
                             <div class="mb-3">
                                 <label for="username">Username</label>
                                 <input type="text" class="form-control" id="username" name="username" value="{{content.username}}">
