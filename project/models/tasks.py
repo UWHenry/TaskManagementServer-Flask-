@@ -9,5 +9,6 @@ class Tasks(db.Model):
     create_time = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     last_modified = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     deadline = db.Column(db.DateTime)
-    completed = db.Column(db.Boolean)
+    completed = db.Column(db.Boolean, default=False)
+    enabled = db.Column(db.Boolean, default=True)
     user = db.Column(db.String, db.ForeignKey("users.username", ondelete="CASCADE"), nullable=False)
