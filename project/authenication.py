@@ -22,16 +22,15 @@ def load_user(username):
 def signup():
     content = {
         "username": "",
-        "error_msg": ""
+        "error_msg": "",
+        "login_url": url_for('auth_blueprint.login'),
+        "signup_url": url_for('auth_blueprint.signup')
     }
     if request.method == 'POST':
         username = request.form["username"]
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
-        content = {
-            "username": username,
-            "error_msg": ""
-        }
+        content["username"] = username
         
         db_user = load_user(username)
         if username == "":
@@ -46,7 +45,7 @@ def signup():
             success = _add_user(username, password)
             if success: 
                 login_user(load_user(username))
-                return redirect(url_for("dashboard"))
+                return redirect(url_for("task_blueprint.dashboard"))
             content["error_msg"] = "Username already exists!"
     return render_template('signup.html', content=content)
 
@@ -69,7 +68,9 @@ def _add_user(username: str, password: str) -> bool:
 def login():
     content = {
         "username": "",
-        "error_msg": ""
+        "error_msg": "",
+        "signup_url": url_for('auth_blueprint.signup'),
+        "login_url": url_for('auth_blueprint.login')
     }
     if request.method == 'POST':
         username = request.form["username"]
@@ -85,7 +86,7 @@ def login():
             correct = argon2.check_password_hash(db_user.password_hash, password)
             if correct:
                 login_user(db_user)
-                return redirect(url_for("dashboard"))
+                return redirect(url_for("task_blueprint.dashboard"))
             content["error_msg"] = "Wrong password, please try again!"
     return render_template('login.html', content=content)
 
@@ -93,4 +94,9 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return 'Logged out successfully'
+    content = {
+        "message": "Log out is successful!",
+        "redirect_url": url_for("index"),
+        "delay": 3
+    }
+    return render_template('logout.html', content=content)
