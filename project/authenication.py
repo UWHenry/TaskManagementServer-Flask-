@@ -31,21 +31,22 @@ def signup():
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
         content["username"] = username
-        
-        db_user = load_user(username)
+
         if username == "":
             content["error_msg"] = "Username can not be empty!"
-        elif db_user is not None:
-            content["error_msg"] = "Username already exists!"
+        elif not username.isalnum():
+            content["error_msg"] = "Only letters and digits are allowed for username!"
         elif password == "":
             content["error_msg"] = "Password can not be empty!"
         elif password != confirm_password:
             content["error_msg"] = "Password and Confirm Password does not match!"
         else:
-            success = _add_user(username, password)
-            if success: 
-                login_user(load_user(username))
-                return redirect(url_for("task_blueprint.dashboard"))
+            db_user = load_user(username)
+            if db_user is None:
+                success = _add_user(username, password)
+                if success: 
+                    login_user(load_user(username))
+                    return redirect(url_for("task_blueprint.dashboard"))
             content["error_msg"] = "Username already exists!"
     return render_template('signup.html', content=content)
 
@@ -64,7 +65,7 @@ def _add_user(username: str, password: str) -> bool:
         return False
 
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")
+@limiter.limit("10 per minute")
 def login():
     content = {
         "username": "",
@@ -75,19 +76,23 @@ def login():
     if request.method == 'POST':
         username = request.form["username"]
         password = request.form["password"]
-        db_user = load_user(username)
+        
         if username == "":
             content["error_msg"] = "Username can not be empty!"
+        elif not username.isalnum():
+            content["error_msg"] = "Only letters and digits are allowed for username!"
         elif password == "":
             content["error_msg"] = "Password can not be empty!"
-        elif db_user is None:
-            content["error_msg"] = "Username does not exist!"
         else:
-            correct = argon2.check_password_hash(db_user.password_hash, password)
-            if correct:
-                login_user(db_user)
-                return redirect(url_for("task_blueprint.dashboard"))
-            content["error_msg"] = "Wrong password, please try again!"
+            db_user = load_user(username)
+            if db_user is None:
+                content["error_msg"] = "Username does not exist!"
+            else:
+                correct = argon2.check_password_hash(db_user.password_hash, password)
+                if correct:
+                    login_user(db_user)
+                    return redirect(url_for("task_blueprint.dashboard"))
+                content["error_msg"] = "Wrong password, please try again!"
     return render_template('login.html', content=content)
 
 @auth_blueprint.route('/logout')
