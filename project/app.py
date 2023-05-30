@@ -8,7 +8,7 @@ from task import task_blueprint
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['SECRET_KEY'] = 'ZJc9ohDUDb'
 
 argon2.init_app(app)
 login_manager.init_app(app)
